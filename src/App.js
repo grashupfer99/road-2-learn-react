@@ -1,39 +1,59 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import logo from "./logo.svg";
+import "./App.css";
 
-
+const list = [
+  {
+    title: "React",
+    url: "https://facebook.github.io/react/",
+    author: "Jordan Walkerson",
+    num_comments: 3,
+    points: 4,
+    objectID: 0
+  },
+  {
+    title: "Redux",
+    url: "https://github.com/reactjs/redux",
+    author: "Dan Abramov, Andrew Clark",
+    num_comments: 2,
+    points: 5,
+    objectID: 1
+  }
+];
 
 // Component declaration
 class App extends Component {
+  constructor(props) {
+    super(props);
 
-constructor(props){
-  super(props);
-  this.formatName = this.formatName.bind(this);
-}
+    this.state = {
+      list: list
+    };
+  }
 
-user = {
-  firstName: 'Alex',
-  lastName: 'Hunt'
-}
+  userService() {}
 
-formatName(user){
-  return `${user.firstName} ${user.lastName}`;
-}
-
-
-
-  // The element this component returns as specified below
   render() {
-
-    const helloWorld = 'Welcome to the Road to learn React!';
-    const name = 'Alexander';
-
     return (
-      <div className="App">
-        <h2>{`Hi, ${name}! ${helloWorld}`}</h2>
-        <hr/>
-        <h3>{this.formatName(this.user)}</h3>
+      <div className="App my-4">
+        {this.state.list.map(item => (
+          <div
+            className="w-50 mx-auto bg-primary border rounded"
+            key={item.objectID}
+          >
+            <span className="d-block">
+              <a className="font-weight-bold text-dark" href={item.url}>
+                {item.title}
+              </a>
+            </span>
+            <span className="d-block">{item.author}</span>
+            <span className="d-block">{item.num_comments}</span>
+            <span className="d-block">{item.points}</span>
+          </div>
+        ))}
+        <div className="w-50 mx-auto my-3 bg-warning border rounded">
+          <span className="font-weight-bold d-block p-3">{}</span>
+        </div>
       </div>
     );
   }
