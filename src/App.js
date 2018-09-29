@@ -38,7 +38,7 @@ class App extends Component {
       <div className="App my-4">
         {this.state.list.map(item => (
           <div
-            className="w-50 mx-auto bg-primary border rounded"
+            className="w-50 mx-auto my-2 bg-primary border rounded shadow-lg"
             key={item.objectID}
           >
             <span className="d-block">
@@ -51,8 +51,20 @@ class App extends Component {
             <span className="d-block">{item.points}</span>
           </div>
         ))}
-        <div className="w-50 mx-auto my-3 bg-warning border rounded">
-          <span className="font-weight-bold d-block p-3">{}</span>
+        <div className="w-50 mx-auto my-3 bg-warning border rounded shadow-lg">
+          <span className="font-weight-bold d-block p-3">
+            {this.state.list.map(
+              (item, idx) =>
+                item.author ? (
+                  <div className="p-2 bg-info rounded border m-2 d-flex justify-content-around">
+                    <span>{idx}#</span>
+                    {item.author}
+                  </div>
+                ) : (
+                  ""
+                )
+            )}
+          </span>
         </div>
       </div>
     );
