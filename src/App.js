@@ -2,6 +2,44 @@ import React, { Component } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 
+class Clock extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      date: new Date()
+    };
+  }
+
+  tick() {
+    this.setState({
+      date: new Date()
+    });
+  }
+
+  // LIFECYCLE HOOKS
+
+  // runs after the component output has been rendered to the DOM
+  componentDidMount() {
+    // set up a timer
+    this.timerID = setInterval(() => this.tick(), 1000);
+  }
+
+  // Tearing down the timer
+  componentWillUnmount() {
+    clearInterval(this.timerID);
+  }
+
+  render() {
+    return (
+      <div className="my-4 w-50 mx-auto rounded bg-info">
+        <span className="h3 font-weight-bold p-2 d-block">
+          {this.state.date.toLocaleTimeString()}
+        </span>
+      </div>
+    );
+  }
+}
+
 const list = [
   {
     title: "React",
@@ -18,6 +56,14 @@ const list = [
     num_comments: 2,
     points: 5,
     objectID: 1
+  },
+  {
+    title: "Redux 2",
+    url: "https://github.com/reactjs/redux",
+    author: "Dan Abramov, Andrew Clark",
+    num_comments: 3,
+    points: 7,
+    objectID: 2
   }
 ];
 
@@ -31,6 +77,7 @@ class App extends Component {
     };
 
     this.onDismiss = this.onDismiss.bind(this);
+    this.tick = this.tick.bind(this);
   }
 
   onDismiss(id) {
@@ -53,6 +100,10 @@ class App extends Component {
     // 4th step (refactored)
     const updatedList = this.state.list.filter(item => item.objectID !== id);
     this.setState({ list: updatedList });
+  }
+
+  tick() {
+    const clock = <span>{new Date().toLocaleTimeString()}</span>;
   }
 
   render() {
@@ -82,6 +133,7 @@ class App extends Component {
             </span>
           </div>
         ))}
+        <Clock />
       </div>
     );
   }
