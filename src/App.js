@@ -40,6 +40,26 @@ class Clock extends Component {
   }
 }
 
+class ExplainBindingsComponent extends Component {
+  constructor(props) {
+    super(props);
+
+    this.onClickMe = () => {
+      console.log(this);
+    };
+  }
+
+  render() {
+    return (
+      <div className="w-50 mx-auto my-5">
+        <button type="button" className="btn btn-info" onClick={this.onClickMe}>
+          Click Me
+        </button>
+      </div>
+    );
+  }
+}
+
 const list = [
   {
     title: "React",
@@ -77,33 +97,11 @@ class App extends Component {
     };
 
     this.onDismiss = this.onDismiss.bind(this);
-    this.tick = this.tick.bind(this);
   }
 
   onDismiss(id) {
-    // 1st step
-    // const updatedList = this.state.list.filter( function isNotId(item){
-    //   return item.objectID !== id
-    // })
-
-    // 2nd step
-    // function isNotId(item) {
-    //   return item.objectID !== id;
-    // }
-
-    // const updatedList = this.state.list.filter(isNotId);
-
-    // 3rd step
-    // const isNotId = item => item.objectID !== id;
-    // const updatedList = this.state.list.filter(isNotId);
-
-    // 4th step (refactored)
     const updatedList = this.state.list.filter(item => item.objectID !== id);
     this.setState({ list: updatedList });
-  }
-
-  tick() {
-    const clock = <span>{new Date().toLocaleTimeString()}</span>;
   }
 
   render() {
@@ -133,7 +131,8 @@ class App extends Component {
             </span>
           </div>
         ))}
-        <Clock />
+        {/* <Clock /> */}
+        <ExplainBindingsComponent />
       </div>
     );
   }
