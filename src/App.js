@@ -1,64 +1,5 @@
 import React, { Component } from "react";
-import logo from "./logo.svg";
 import "./App.css";
-
-class Clock extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      date: new Date()
-    };
-  }
-
-  tick() {
-    this.setState({
-      date: new Date()
-    });
-  }
-
-  // LIFECYCLE HOOKS
-
-  // runs after the component output has been rendered to the DOM
-  componentDidMount() {
-    // set up a timer
-    this.timerID = setInterval(() => this.tick(), 1000);
-  }
-
-  // Tearing down the timer
-  componentWillUnmount() {
-    clearInterval(this.timerID);
-  }
-
-  render() {
-    return (
-      <div className="my-4 w-50 mx-auto rounded bg-info">
-        <span className="h3 font-weight-bold p-2 d-block">
-          {this.state.date.toLocaleTimeString()}
-        </span>
-      </div>
-    );
-  }
-}
-
-class ExplainBindingsComponent extends Component {
-  constructor(props) {
-    super(props);
-
-    this.onClickMe = () => {
-      console.log(this);
-    };
-  }
-
-  render() {
-    return (
-      <div className="w-50 mx-auto my-5">
-        <button type="button" className="btn btn-info" onClick={this.onClickMe}>
-          Click Me
-        </button>
-      </div>
-    );
-  }
-}
 
 const list = [
   {
@@ -123,6 +64,7 @@ class App extends Component {
             <span className="my-auto">
               <button
                 className="btn btn-danger m-2"
+                // onClick={() => console.log(item.objectID)}
                 onClick={() => this.onDismiss(item.objectID)}
                 type="button"
               >
@@ -131,8 +73,6 @@ class App extends Component {
             </span>
           </div>
         ))}
-        {/* <Clock /> */}
-        <ExplainBindingsComponent />
       </div>
     );
   }
