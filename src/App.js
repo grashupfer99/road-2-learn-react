@@ -10,17 +10,15 @@ class ToggleButtonHandler extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      toggleBtn: "On"
+      toggleBtn: true
     };
     this.toggleBtn = this.toggleBtn.bind(this);
   }
 
   toggleBtn() {
-    console.log("on/off");
-    let toggle = this.state.toggleBtn === "On" ? "Off" : "On";
-    this.setState({
-      toggleBtn: toggle
-    });
+    this.setState(prevState => ({
+      toggleBtn: !prevState.toggleBtn
+    }));
   }
 
   render() {
@@ -35,7 +33,7 @@ class ToggleButtonHandler extends Component {
           className="mx-auto btn btn-dark"
           onClick={this.toggleBtn}
         >
-          {this.state.toggleBtn}
+          {this.state.toggleBtn ? "On" : "Off"}
         </button>
       </div>
     );
