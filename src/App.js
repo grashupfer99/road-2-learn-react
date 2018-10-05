@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import FlipMove from "react-flip-move";
+import { FormGroup, Input, Label  } from 'reactstrap';
 import "./App.css";
 
 const ActionLink = e => {
@@ -96,6 +97,22 @@ const list = [
     num_comments: 3,
     points: 7,
     objectID: 6
+  },
+  {
+    title: "JavaScript",
+    url: "https://github.com/reactjs/redux",
+    author: "Dan Abramov, Andrew Clark",
+    num_comments: 3,
+    points: 7,
+    objectID: 7
+  },
+  {
+    title: "JavaScript +",
+    url: "https://github.com/reactjs/redux",
+    author: "Dan Abramov, Andrew Clark",
+    num_comments: 3,
+    points: 7,
+    objectID: 8
   }
 ];
 
@@ -109,6 +126,9 @@ function isSearched(keyword) {
 
 */
 
+// https://zetawiki.com/wiki/%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8_checkbox_%EB%AA%A8%EB%91%90_%EC%B2%B4%ED%81%AC
+// https://jsbin.com/kerakijamo/1/edit?js,output
+// 자바스크립트_checkbox_모두_체크
 const isSearched = searchTerm => item =>
   item.title.toLowerCase().includes(searchTerm.toLowerCase());
 
@@ -124,6 +144,8 @@ class App extends Component {
 
     this.onDismiss = this.onDismiss.bind(this);
     this.onSearchChange = this.onSearchChange.bind(this);
+    this.selectAll = this.selectAll.bind(this);
+    this.selectAll = this.selectAll.bind(this);
   }
 
   onDismiss(id) {
@@ -138,12 +160,14 @@ class App extends Component {
   }
 
   render() {
+    const { searchTerm, list } = this.state;
     return (
       <div className="App my-4">
         <form className="bg-info my-5 mx-auto w-50">
           <div className="form-group">
             <input
               className="form-control"
+              value={searchTerm}
               type="text"
               onChange={this.onSearchChange}
             />
@@ -205,7 +229,51 @@ class App extends Component {
         ))} */}
         <hr className="w-75 my-5 mx-auto" />
         <ToggleButtonHandler />
+        <div className="my-5">
+        <FormGroup>
+        <Input
+          type="checkbox"
+          name="all"
+          id="all"
+          onClick={this.selectAll}/>
+          <Label htmlFor="all">
+            Toggle All
+          </Label>
+        </FormGroup>
+        <FormGroup>
+        <Input
+          type="checkbox"
+          name="box1"
+          onClick={this.checkThis}
+          id="box1"/>
+          <Label htmlFor="box1">
+            Box 1
+          </Label>
+        </FormGroup>
+        <FormGroup>
+        <Input
+          type="checkbox"
+          name="box2"
+          onClick={this.checkThis}
+          id="box2"/>
+          <Label htmlFor="box2">
+            Box 2
+          </Label>
+        </FormGroup>
+        <FormGroup>
+        <Input
+          type="checkbox"
+          name="box3"
+          onClick={this.checkThis}
+          id="box3"/>
+          <Label htmlFor="box3">
+            Box 3
+          </Label>
+        </FormGroup>
       </div>
+
+      </div>
+
     );
   }
 }
