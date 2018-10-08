@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import FlipMove from "react-flip-move";
 import { FormGroup, Input, Label  } from 'reactstrap';
 import "./App.css";
+import Checkboxes from "./Checkboxes";
 
 const ActionLink = e => {
   console.log("The link was clicked.");
@@ -39,6 +40,14 @@ class ToggleButtonHandler extends Component {
       </div>
     );
   }
+}
+
+const getChecked = (list) => {
+  const newList = []
+  list.map( item => {
+    return newList.push(item.checked = {"checked":false})
+  })
+  return newList;
 }
 
 const list = [
@@ -132,6 +141,84 @@ function isSearched(keyword) {
 const isSearched = searchTerm => item =>
   item.title.toLowerCase().includes(searchTerm.toLowerCase());
 
+class InputCheckboxAll extends Component {
+  constructor(props){
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+  }
+  handleChange(e){
+    this.props.selectAll(e);
+  }
+  render(){
+    return(
+      <FormGroup>
+        <Input
+          type="checkbox"
+          name="all"
+          id="all"
+          // {...this.props}
+          onChange={this.props.handleChange}/>
+          <Label htmlFor="all">
+            Toggle All
+          </Label>
+      </FormGroup>
+    )
+  }
+}
+
+class InputCheckbox extends Component {
+  constructor(props){
+    super(props)
+    this.onChange = this.onChange.bind(this);
+    this.state = {
+      checked: false
+    }
+  }
+
+  onChange(e){
+    this.setState({
+      checked: !this.state.checked
+    })
+  }
+
+  render(){
+    const checkedValue = this.props.allChecked ? true : this.state.checked
+    return(
+      <FormGroup>
+        <Input
+          type="checkbox"
+          checked={checkedValue}
+          onChange={this.onChange}
+          // {...this.props}
+        />
+        <Label>
+          {this.props.name}
+        </Label>
+      </FormGroup>
+    )
+  }
+}
+
+class Checkbox extends Component {
+  render(){
+    const {item, isChecked} = this.props; 
+    return(
+      <FormGroup>
+        <Input
+          type="checkbox"
+          checked={isChecked}
+          onChange={this.props.handleCheckboxClick}
+        />
+        <Label>
+          {this.props.name}
+        </Label>
+      </FormGroup>
+    )
+  }
+}
+
+
+
 // Component declaration
 class App extends Component {
   constructor(props) {
@@ -139,14 +226,35 @@ class App extends Component {
 
     this.state = {
       list: list,
-      searchTerm: ""
+      searchTerm: "",
+      allChecked: false,
+      checkedOne: false,
+      checked: getChecked(list)
     };
 
     this.onDismiss = this.onDismiss.bind(this);
     this.onSearchChange = this.onSearchChange.bind(this);
     this.selectAll = this.selectAll.bind(this);
-    this.selectAll = this.selectAll.bind(this);
+    
   }
+
+  // state management
+  // .val()
+  // he never seen anyone doing like this
+  // instead use state
+  //
+
+  selectAll(e){
+    const element = e.target;
+    const checked = element.checked;
+
+    this.setState({
+      checkedOne: !this.state.checkedOne,
+      allChecked: checked
+    })
+  }
+
+
 
   onDismiss(id) {
     const updatedList = this.state.list.filter(item => item.objectID !== id);
@@ -161,8 +269,12 @@ class App extends Component {
 
   render() {
     const { searchTerm, list } = this.state;
+    console.log(getChecked(list));
     return (
       <div className="App my-4">
+      <div className="my-5">
+          <Checkboxes />
+        </div>
         <form className="bg-info my-5 mx-auto w-50">
           <div className="form-group">
             <input
@@ -229,48 +341,7 @@ class App extends Component {
         ))} */}
         <hr className="w-75 my-5 mx-auto" />
         <ToggleButtonHandler />
-        <div className="my-5">
-        <FormGroup>
-        <Input
-          type="checkbox"
-          name="all"
-          id="all"
-          onClick={this.selectAll}/>
-          <Label htmlFor="all">
-            Toggle All
-          </Label>
-        </FormGroup>
-        <FormGroup>
-        <Input
-          type="checkbox"
-          name="box1"
-          onClick={this.checkThis}
-          id="box1"/>
-          <Label htmlFor="box1">
-            Box 1
-          </Label>
-        </FormGroup>
-        <FormGroup>
-        <Input
-          type="checkbox"
-          name="box2"
-          onClick={this.checkThis}
-          id="box2"/>
-          <Label htmlFor="box2">
-            Box 2
-          </Label>
-        </FormGroup>
-        <FormGroup>
-        <Input
-          type="checkbox"
-          name="box3"
-          onClick={this.checkThis}
-          id="box3"/>
-          <Label htmlFor="box3">
-            Box 3
-          </Label>
-        </FormGroup>
-      </div>
+        
 
       </div>
 
@@ -279,3 +350,4 @@ class App extends Component {
 }
 
 export default App;
+export { list };
