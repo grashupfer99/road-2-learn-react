@@ -1,279 +1,133 @@
 import React, { Component } from "react";
-import FlipMove from "react-flip-move";
-import { FormGroup, Input, Label  } from 'reactstrap';
+// import FlipMove from "react-flip-move";
+import { FormGroup, Input, Label } from "reactstrap";
 import "./App.css";
+import { list } from "./list";
 
-const ActionLink = e => {
-  console.log("The link was clicked.");
-};
+const createListItems = list.map(item => ({
+  title: item.title,
+  id: item.objectID
+}));
 
-class ToggleButtonHandler extends Component {
+class App extends Component {
   constructor(props) {
     super(props);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleChangeAll = this.handleChangeAll.bind(this);
+
     this.state = {
-      toggleBtn: true
+      // checkbox items
+      items: createListItems,
+      // store checked items here: value:item name, checked: true/false
+      checkedListAll: [],
+      // all items checked
+      checkAll: false
     };
-    this.toggleBtn = this.toggleBtn.bind(this);
   }
 
-  toggleBtn() {
-    this.setState(prevState => ({
-      toggleBtn: !prevState.toggleBtn
-    }));
+  // Select Items
+  handleChangeAll(e) {
+    const { checked } = e.target;
+    const listItems = this.state.items;
+    const tempItems = [];
+
+    if (checked) {
+      // add checked item's id to array
+      listItems.map(item => tempItems.push(item.id));
+    }
+
+    this.setState({
+      checkedListAll: tempItems,
+      checkAll: checked
+    });
+  }
+
+  // Handle Checkbox Click
+  handleChange(e) {
+    // value: item's id, checked: true/false
+    const { value, checked } = e.target;
+    // when a single checkbox is being checked
+    if (checked) {
+      this.setState(prevState => ({
+        // add a new value to prev array items
+        checkedListAll: [...prevState.checkedListAll, value]
+      }));
+    } else {
+      this.setState(prevState => ({
+        // remove selected value from array
+        checkedListAll: prevState.checkedListAll.filter(item => item !== value)
+      }));
+    }
   }
 
   render() {
+    const { items, checkedListAll, checkAll } = this.state;
+
     return (
-      <div className="my-4">
-        <button type="text" className="btn btn-warning" onClick={ActionLink}>
-          ActionLink
-        </button>
-        <div className="my-2" />
-        <button
-          type="text"
-          className="mx-auto btn btn-dark"
-          onClick={this.toggleBtn}
-        >
-          {this.state.toggleBtn ? "On" : "Off"}
-        </button>
+      <div className="App my-4">
+        <header>
+          <FormGroup className="m-0 custom-control custom-checkbox">
+            <Input
+              className="custom-control-input"
+              id="select-all"
+              type="checkbox"
+              checked={checkAll}
+              onChange={this.handleChangeAll}
+            />
+            <Label htmlFor="select-all" className="custom-control-label">
+              Select all
+            </Label>
+          </FormGroup>
+        </header>
+        <ul className="w-50 list-group mx-auto my-5">
+          {items.map((item, i) => {
+            return (
+              <li key={i} className="my-1 py-2 rounded list-group-item">
+                <Checkbox
+                  id={item.id}
+                  isChecked={checkedListAll.includes(item.id)}
+                  handleChange={this.handleChange}
+                  title={item.title}
+                />
+              </li>
+            );
+          })}
+        </ul>
+        <div className="w-50 my-3 mx-auto text-left">
+          {this.state.checkedListAll.map((item, i) => {
+            return (
+              <div
+                key={i}
+                className="rounded px-2 bg-info py-1 my-2 mx-1 d-inline-block"
+              >
+                {item}
+              </div>
+            );
+          })}
+        </div>
       </div>
     );
   }
 }
 
-const list = [
-  {
-    title: "React",
-    url: "https://facebook.github.io/react/",
-    author: "Jordan Walkerson",
-    num_comments: 3,
-    points: 4,
-    objectID: 0
-  },
-  {
-    title: "Redux",
-    url: "https://github.com/reactjs/redux",
-    author: "Dan Abramov, Andrew Clark",
-    num_comments: 2,
-    points: 5,
-    objectID: 1
-  },
-  {
-    title: "Console Guru",
-    url: "https://github.com/reactjs/redux",
-    author: "Dan Abramov, Andrew Clark",
-    num_comments: 2,
-    points: 5,
-    objectID: 2
-  },
-  {
-    title: "Node js",
-    url: "https://github.com/reactjs/redux",
-    author: "Dan Abramov, Andrew Clark",
-    num_comments: 2,
-    points: 5,
-    objectID: 3
-  },
-  {
-    title: "Linux Programming",
-    url: "https://github.com/reactjs/redux",
-    author: "Dan Abramov, Andrew Clark",
-    num_comments: 2,
-    points: 5,
-    objectID: 4
-  },
-  {
-    title: "Electron js",
-    url: "https://github.com/reactjs/redux",
-    author: "Dan Abramov, Andrew Clark",
-    num_comments: 2,
-    points: 5,
-    objectID: 5
-  },
-  {
-    title: "TypeScript",
-    url: "https://github.com/reactjs/redux",
-    author: "Dan Abramov, Andrew Clark",
-    num_comments: 3,
-    points: 7,
-    objectID: 6
-  },
-  {
-    title: "JavaScript",
-    url: "https://github.com/reactjs/redux",
-    author: "Dan Abramov, Andrew Clark",
-    num_comments: 3,
-    points: 7,
-    objectID: 7
-  },
-  {
-    title: "JavaScript +",
-    url: "https://github.com/reactjs/redux",
-    author: "Dan Abramov, Andrew Clark",
-    num_comments: 3,
-    points: 7,
-    objectID: 8
-  }
-];
-
-/*
-// ES5
-function isSearched(keyword) {
-  return function(item) {
-    return item.title.toLowerCase().indexOf(keyword.toLowerCase()) !== -1;
-  }
-}
-
-*/
-
-// https://zetawiki.com/wiki/%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8_checkbox_%EB%AA%A8%EB%91%90_%EC%B2%B4%ED%81%AC
-// https://jsbin.com/kerakijamo/1/edit?js,output
-// 자바스크립트_checkbox_모두_체크
-const isSearched = searchTerm => item =>
-  item.title.toLowerCase().includes(searchTerm.toLowerCase());
-
-// Component declaration
-class App extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      list: list,
-      searchTerm: ""
-    };
-
-    this.onDismiss = this.onDismiss.bind(this);
-    this.onSearchChange = this.onSearchChange.bind(this);
-    this.selectAll = this.selectAll.bind(this);
-    this.selectAll = this.selectAll.bind(this);
-  }
-
-  onDismiss(id) {
-    const updatedList = this.state.list.filter(item => item.objectID !== id);
-    this.setState({ list: updatedList });
-  }
-
-  onSearchChange(e) {
-    this.setState({
-      searchTerm: e.target.value
-    });
-  }
-
+class Checkbox extends Component {
   render() {
-    const { searchTerm, list } = this.state;
+    const { id, isChecked, handleChange, title } = this.props;
+
     return (
-      <div className="App my-4">
-        <form className="bg-info my-5 mx-auto w-50">
-          <div className="form-group">
-            <input
-              className="form-control"
-              value={searchTerm}
-              type="text"
-              onChange={this.onSearchChange}
-            />
-          </div>
-        </form>
-        <FlipMove duration={250} easing="ease-out">
-          {this.state.list
-            .filter(isSearched(this.state.searchTerm))
-            .map(item => (
-              <div
-                key={item.objectID}
-                className="bg-info rounded m-2 d-flex justify-content-between w-75 mx-auto"
-              >
-                <span className="my-auto mx-2">
-                  <a className="text-dark font-weight-bold" href={item.url}>
-                    {item.title}
-                  </a>
-                </span>
-                <span className="my-auto">{item.author}</span>
-                <span className="my-auto">{item.num_comments}</span>
-                <span className="my-auto">{item.points}</span>
-                <span className="my-auto">
-                  <button
-                    className="btn btn-danger m-2"
-                    // onClick={() => console.log(item.objectID)}
-                    onClick={() => this.onDismiss(item.objectID)}
-                    type="button"
-                  >
-                    Dismiss
-                  </button>
-                </span>
-              </div>
-            ))}
-        </FlipMove>
-        {/* {this.state.list.map(item => (
-          <div
-            key={item.objectID}
-            className="bg-info rounded m-2 d-flex justify-content-between w-75 mx-auto"
-          >
-            <span className="my-auto mx-2">
-              <a className="text-dark font-weight-bold" href={item.url}>
-                {item.title}
-              </a>
-            </span>
-            <span className="my-auto">{item.author}</span>
-            <span className="my-auto">{item.num_comments}</span>
-            <span className="my-auto">{item.points}</span>
-            <span className="my-auto">
-              <button
-                className="btn btn-danger m-2"
-                // onClick={() => console.log(item.objectID)}
-                onClick={() => this.onDismiss(item.objectID)}
-                type="button"
-              >
-                Dismiss
-              </button>
-            </span>
-          </div>
-        ))} */}
-        <hr className="w-75 my-5 mx-auto" />
-        <ToggleButtonHandler />
-        <div className="my-5">
-        <FormGroup>
+      <FormGroup className="m-0 custom-control custom-checkbox d-flex flex-column justify-content-between">
         <Input
+          className="custom-control-input"
           type="checkbox"
-          name="all"
-          id="all"
-          onClick={this.selectAll}/>
-          <Label htmlFor="all">
-            Toggle All
-          </Label>
-        </FormGroup>
-        <FormGroup>
-        <Input
-          type="checkbox"
-          name="box1"
-          onClick={this.checkThis}
-          id="box1"/>
-          <Label htmlFor="box1">
-            Box 1
-          </Label>
-        </FormGroup>
-        <FormGroup>
-        <Input
-          type="checkbox"
-          name="box2"
-          onClick={this.checkThis}
-          id="box2"/>
-          <Label htmlFor="box2">
-            Box 2
-          </Label>
-        </FormGroup>
-        <FormGroup>
-        <Input
-          type="checkbox"
-          name="box3"
-          onClick={this.checkThis}
-          id="box3"/>
-          <Label htmlFor="box3">
-            Box 3
-          </Label>
-        </FormGroup>
-      </div>
-
-      </div>
-
+          id={this.props.id}
+          value={id}
+          checked={isChecked}
+          onChange={handleChange}
+        />
+        <Label htmlFor={id} className="custom-control-label">
+          {title}
+        </Label>
+      </FormGroup>
     );
   }
 }
